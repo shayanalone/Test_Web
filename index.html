@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon King</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif; /* Clean, professional font */
+    background-color: #F9FAFB; /* Light gray background for mobile */
+    color: #111827; /* Black for primary text */
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+header {
+    background-color: #FFFFFF;
+    padding: 0.75rem 1rem; /* Tight padding for mobile */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    height: 52px; /* Compact header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    font-size: 1.375rem; /* Smaller logo for mobile */
+    font-weight: 600;
+    color: #111827; /* Black logo text */
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.back-btn {
+    display: none;
+    background-color: #1E40AF; /* Dark blue for buttons */
+    color: #FFFFFF;
+    border: none;
+    padding: 0.5rem 0.875rem; /* Compact padding */
+    font-size: 0.75rem; /* Smaller font */
+    border-radius: 4px; /* Tight radius */
+    cursor: pointer;
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background-color 0.2s ease;
+    width: auto; /* Minimal width */
+}
+
+.back-btn.visible {
+    display: inline-block;
+}
+
+.back-btn:hover {
+    background-color: #1E3A8A; /* Slightly darker blue on hover */
+}
+
+.section {
+    display: none;
+    padding: 0.75rem; /* Tight padding for sections */
+    margin-top: 52px; /* Adjusted for header */
+    flex: 1;
+    width: 100%; /* Full width */
+}
+
+.section.active {
+    display: block;
+}
+
+.location {
+    color: #6B7280; /* Gray for location text */
+    font-weight: 500;
+    margin: 0.375rem 0; /* Tight margin */
+    text-align: left;
+    font-size: 0.875rem;
+}
+
+/* Home Section */
+#home {
+    text-align: center;
+    width: 100%;
+}
+
+#home h1 {
+    font-size: 1.375rem; /* Compact heading */
+    color: #111827; /* Black */
+    margin: 0.5rem 0; /* Tight margin */
+    text-align: left;
+    font-weight: 600;
+}
+
+#home p {
+    font-size: 0.875rem; /* Smaller text */
+    color: #6B7280; /* Gray */
+    margin: 0.5rem 0; /* Tight margin */
+    text-align: left;
+}
+
+#home .btn {
+    background-color: #1E40AF; /* Dark blue */
+    color: #FFFFFF;
+    padding: 0.625rem 1rem; /* Compact padding */
+    font-size: 0.875rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    marginrobot: pointer;
+    margin: 0.375rem 0; /* Tight margin */
+    width: 100%; /* Full width */
+    display: block;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+#home .btn:hover {
+    background-color: #1E3A8A; /* Darker blue on hover */
+}
+
+/* Salon Grid */
+.salon-grid, .bookings-grid, .dashboard-grid {
+    width: 100%;
+    margin: 0.5rem 0; /* Tight margin */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Smaller gap */
+    /* padding: 0 0.25rem; Minimal padding */
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
+}
+
+#home .salon-grid {
+    margin-top: 0;
+}
+.bookedSalon_userCard{
+    background-color: #FFFFFF;
+    box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    width: 100%;
+    text-align: center;
+}
+.salon-card, .booking-card {
+    background-color: #FFFFFF;
+    padding: 0.75rem; /* Tight padding */
+    border-radius: 6px;
+    box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.4); /* Subtle shadow */
+    width: 100%;
+    gap: 100px;
+    text-align: left;
+}
+
+#home .salon-card {
+    max-width: 100%;
+    margin-top: 0;
+}
+
+.salon-card .slider, .booking-card .slider {
+    width: 100%;
+    height: 45vw; /* Compact height */
+    max-height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px 6px 0 0;
+}
+
+.salon-card .slides, .booking-card .slides {
+    display: flex;
+    transition: transform 0.4s ease;
+    height: 100%;
+}
+
+.salon-card .slide, .booking-card .slide {
+    min-width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.salon-card .slider-btn, .booking-card .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1E40AF; /* Dark blue */
+    color: #FFFFFF;
+    border: none;
+    padding: 0.375rem; /* Smaller buttons */
+    cursor: pointer;
+    font-size: 0.625rem;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.salon-card .prev, .booking-card .prev {
+    left: 0.375rem;
+}
+
+.salon-card .next, .booking-card .next {
+    right: 0.375rem;
+}
+
+.salon-card .details, .booking-card .details, .dashboard .details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0.5rem 0; /* Tight margin */
+}
+
+.salon-card .details p, .booking-card .details p, .dashboard .details p {
+    margin: 0.25rem 0; /* Tight spacing */
+    text-align: left;
+    font-size: 0.75rem; /* Smaller text */
+    color: #6B7280; /* Gray */
+}
+
+.salon-card .details p strong, .booking-card .details p strong, .dashboard .details p strong {
+    font-weight: 600;
+    color: #111827; /* Black */
+}
+
+.salon-card .details p a, .booking-card .details p a, .dashboard .details p a {
+    color: #1E40AF; /* Dark blue */
+    text-decoration: none;
+}
+
+.salon-card .details p a:hover, .booking-card .details p a:hover, .dashboard .details p a:hover {
+    text-decoration: underline;
+}
+
+.salon-card h3, .booking-card h3 {
+    font-size: 1.125rem; /* Compact heading */
+    margin: 0.375rem 0; /* Tight margin */
+    text-align: left;
+    font-weight: 600;
+    color: #111827; /* Black */
+}
+
+.salon-card .btn, .booking-card .btn {
+    background-color: #1E40AF; /* Dark blue */
+    color: #FFFFFF;
+    padding: 0.625rem 1rem; /* Compact padding */
+    font-size: 0.875rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin: 0.375rem 0; /* Tight margin */
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+.salon-card .btn:hover, .booking-card .btn:hover {
+    background-color: #1E3A8A;
+}
+
+/* User Booking Section */
+.form-container {
+    /* max-width: 100%; */
+    width: 100%;
+    margin: 0.5rem 0; /* Tight margin */
+    background-color: #FFFFFF;
+    padding: 0.75rem; /* Tight padding */
+    /* border-radius: 6px; */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0);
+    text-align: center;
+    position: relative;
+}
+
+.form-container h2 {
+    position: sticky;
+    top: 52px;
+    z-index: 900;
+    background-color: #ffffffd0;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+
+    
+    font-size: 1.375rem; /* Compact heading */
+    text-align: center;
+    margin-bottom: 0.5rem; /* Tight margin */
+    padding: 0.5rem 0;
+    font-weight: 600;
+    color: #111827;
+}
+
+.form-container h3, .form-container p.location {
+    margin-bottom: 0.375rem; /* Tight margin */
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6B7280; /* Gray */
+}
+
+.form-container .slider {
+    width: 100%;
+    height: 45vw;
+    max-height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0.5rem; /* Tight margin */
+}
+
+.form-container .slides {
+    display: flex;
+    transition: transform 0.4s ease;
+    height: 100%;
+}
+
+.form-container .slide {
+    min-width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.form-container .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1E40AF; /* Dark blue */
+    color: #FFFFFF;
+    border: none;
+    padding: 0.375rem;
+    cursor: pointer;
+    font-size: 0.625rem;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.form-container .prev {
+    left: 0.375rem;
+}
+
+.form-container .next {
+    right: 0.375rem;
+}
+
+.form-container label {
+    font-size: 0.75rem; /* Smaller labels */
+    display: block;
+    margin-bottom: 0.25rem; /* Tight margin */
+    text-align: left;
+    color: #111827; /* Black */
+}
+
+.form-container input[type="text"],
+.form-container input[type="password"],
+.form-container input[type="time"],
+.form-container select,
+.form-container input[type="number"],
+.form-container input[type="file"] {
+    width: 100%;
+    padding: 0.5rem; /* Compact padding */
+    margin-bottom: 0.5rem; /* Tight margin */
+    border: 1px solid #D1D5DB; /* Light gray border */
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: block;
+    box-sizing: border-box;
+    background-color: #F9FAFB;
+    color: #111827; /* Black */
+}
+
+.form-container select {
+    width: 100%;
+    max-height: 80px; /* Compact dropdown */
+    overflow-y: auto;
+    padding: 0.5rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%231E40AF' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 10px;
+}
+
+.form-container .btn {
+    background-color: #1E40AF; /* Dark blue */
+    color: #FFFFFF;
+    padding: 0.625rem 1rem; /* Compact padding */
+    font-size: 0.875rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin: 0.375rem 0; /* Tight margin */
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+.form-container .btn:hover {
+    background-color: #1E3A8A;
+}
+
+/* Your Salon Dashboard */
+.dashboard {
+    max-width: 100%;
+    width: 100%;
+    margin: 0.5rem 0; /* Tight margin */
+    text-align: center;
+}
+
+.dashboard h2 {
+    font-size: 1.375rem; /* Compact heading */
+    margin-bottom: 0.5rem;
+    text-align: center;
+    position: sticky;
+    top: 52px;
+    background-color: #ffffffd0;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 0;
+    z-index: 900;
+    font-weight: 600;
+    color: #111827; /* Black */
+}
+
+.dashboard .salon-card {
+    width: 100%;
+    max-width: 100%;
+}
+
+.dashboard .details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0.5rem 0; /* Tight margin */
+}
+
+.dashboard .details p {
+    margin: 0.25rem 0; /* Tight spacing */
+    text-align: left;
+    font-size: 0.75rem;
+    color: #6B7280; /* Gray */
+}
+
+.dashboard .details p strong {
+    font-weight: 600;
+    color: #111827; /* Black */
+}
+
+/* Additional Sections */
+.booking-card img {
+    width: 100px; /* Compact image */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0.5rem auto; /* Tight margin */
+    display: block;
+}
+
+.list-container {
+    margin-bottom: 0.5rem; /* Tight margin */
+    padding: 0.5rem; /* Compact padding */
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+}
+
+.list-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem; /* Smaller gap */
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.list-item label {
+    text-align: left;
+    width: 100%;
+    font-size: 0.75rem;
+    color: #111827; /* Black */
+}
+
+.list-item input {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.no-booking {
+    max-width: 100%;
+    width: 100%;
+    margin: 0.5rem 0; /* Tight margin */
+    text-align: center;
+}
+
+.no-booking h2 {
+    font-size: 1.375rem; /* Compact heading */
+    margin-bottom: 0.5rem;
+    text-align: left;
+    position: sticky;
+    top: 52px;
+    background-color: #FFFFFF;
+    padding: 0.5rem 0;
+    z-index: 900;
+    font-weight: 600;
+    color: #111827; /* Black */
+}
+
+.no-booking p {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6B7280; /* Gray */
+}
+
+.error {
+    display: none;
+    position: fixed;
+    top: 52px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #FEF2F2; /* Soft red */
+    color: #B91C1C;
+    padding: 0.5rem 0.75rem; /* Compact padding */
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    z-index: 2000;
+    font-size: 0.75rem;
+    text-align: center;
+    width: 90%;
+    max-width: 90%;
+}
+
+.error.visible {
+    display: block;
+    animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+footer {
+    background-color: #FFFFFF;
+    padding: 0.75rem; /* Compact padding */
+    text-align: center;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.05);
+    margin-top: auto;
+    width: 100%;
+}
+
+footer p {
+    font-size: 0.75rem; /* Smaller text */
+    color: #6B7280; /* Gray */
+}
+
+/* Mobile-only design (up to 767px) */
+@media (max-width: 767px) {
+    .salon-grid, .bookings-grid, .dashboard-grid {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .salon-card, .booking-card {
+        max-width: 100%;
+    }
+
+    .form-container, .dashboard, .no-booking {
+        max-width: 100%;
+    }
+
+    .salon-card .slider, .booking-card .slider, .form-container .slider {
+        height: 45vw;
+        max-height: 200px;
+    }
+
+    .list-item {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .list-item input {
+        min-width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <button id="back-btn" class="back-btn" onclick="showSection('home')">Back</button>
+        <div class="logo">Salon King</div>
+    </header>
+    <!-- Home Section -->
+    <div id="home" class="section active">
+        <div style="padding: 1rem;">
+            <h1>Discover top Salons near you</h1>
+            <div id="home-error" class="error"></div>
+            <p style="margin-bottom: 10px;">Find and book your perfect salon appointment with ease.</p>
+            <p>If you want to register so click Your Salon</p>
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="showSection('your-booked-salon')">Your Booked Salon</button>
+                <button class="btn" onclick="showSection('your-salon')">Your Salon</button>
+            </div>
+            <h2>All Salons Registered</h2>
+            <h3>In our Platform</h3>
+            <hr>
+        </div>
+        <div id="salon-grid" class="salon-grid">
+
+        </div>
+    </div>
+
+    <!-- Your Salon Section -->
+    <div id="your-salon" class="section">
+        <div id="salon-login" class="form-container">
+            <h2>Salon Owner Login</h2>
+            <div id="login-error" class="error"></div>
+            <label for="login-salon-name">Salon Name</label>
+            <input type="text" id="login-salon-name" placeholder="Salon Name" required>
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Password" required>
+            <button class="btn" onclick="loginSalon()">Login</button>
+            <button class="btn" onclick="showForm('salon-register')">Register</button>
+            <button class="btn" onclick="showSection('home')">Back to Home</button>
+        </div>
+        <div id="salon-register" class="form-container" style="display: none;">
+            <h2>Salon Registration</h2>
+            <div id="register-error" class="error"></div>
+            <label for="reg-permission-code">Permission Code</label>
+            <label for="reg-permission-code">Ask this Permission code by Shayan Shahid: email:shayanwork123@gmail.com</p>
+            <input type="text" id="reg-permission-code" placeholder="Permission Code" required>
+            <label for="reg-owner-name">Owner Name</label>
+            <input type="text" id="reg-owner-name" placeholder="Owner Name" required>
+            <label for="reg-salon-name">Salon Name</label>
+            <input type="text" id="reg-salon-name" placeholder="Salon Name" required>
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" placeholder="Password" required>
+            <label for="reg-location">Location</label>
+            <input type="text" id="reg-location" placeholder="Location" required>
+            <label for="reg-seatCount">Seats Available</label>
+            <input type="number" id="reg-seatCount" placeholder="Seats Available" required>
+            <label for="reg-open-time">Opening Time</label>
+            <input type="time" id="reg-open-time" required>
+            <label for="reg-close-time">Closing Time</label>
+            <input type="time" id="reg-close-time" required>
+            <div class="list-container" id="break-list">
+                <h3>Break Times</h3>
+                <div class="list-item">
+                    <label>Break Time Range</label>
+                    <input type="time" class="break-from" placeholder="From">
+                    <input type="time" class="break-to" placeholder="To">
+                    <button class="btn" onclick="removeListItem(this)">Remove</button>
+                </div>
+            </div>
+            <button class="btn" onclick="addBreakTime()">Add Break Time</button>
+            <div class="list-container" id="service-list">
+                <h3>Services</h3>
+                <div class="list-item">
+                    <label>Service Details</label>
+                    <input type="text" class="service-name" placeholder="Service Name">
+                    <input type="number" class="service-price" placeholder="Price (PKR)">
+                    <input type="number" class="service-time" placeholder="Time (min)">
+                    <button class="btn" onclick="removeListItem(this)">Remove</button>
+                </div>
+            </div>
+            <button class="btn" onclick="addService()">Add Service</button>
+            <label for="reg-owner-image">Owner Image</label>
+            <input type="file" id="reg-owner-image" accept="image/*">
+            <label for="reg-salon-image">Salon Images</label>
+            <input type="file" id="reg-salon-image" accept="image/*" multiple>
+            <button class="btn" onclick="registerSalon()">Register</button>
+            <button class="btn" onclick="showForm('salon-login')">Back to Login</button>
+            <button class="btn" onclick="showSection('home')">Back to Home</button>
+        </div>
+        <div id="salon-settings" class="form-container" style="display: none;">
+            <h2>Edit Salon Settings</h2>
+            <div id="settings-error" class="error"></div>
+            <label for="set-owner-name">Owner Name</label>
+            <input type="text" id="set-owner-name" placeholder="Owner Name" required>
+            <label for="set-salon-name">Salon Name</label>
+            <input type="text" id="set-salon-name" placeholder="Salon Name" required>
+            <label for="set-password">Password</label>
+            <input type="password" id="set-password" placeholder="Password" required>
+            <label for="set-location">Location</label>
+            <input type="text" id="set-location" placeholder="Location" required>
+
+            <label for="set-seatCount">Seats Available</label>
+            <input type="number" id="set-seatCount" placeholder="Seats Available" required>
+
+            <label for="set-open-time">Opening Time</label>
+            <input type="time" id="set-open-time" required>
+            <label for="set-close-time">Closing Time</label>
+            <input type="time" id="set-close-time" required>
+            <div class="list-container" id="set-break-list">
+                <h3>Break Times</h3>
+                <div class="list-item">
+                    <label>Break Time Range</label>
+                    <input type="time" class="break-from" placeholder="From">
+                    <input type="time" class="break-to" placeholder="To">
+                    <button class="btn" onclick="removeListItem(this)">Remove</button>
+                </div>
+            </div>
+            <button class="btn" onclick="addBreakTime('set-break-list')">Add Break Time</button>
+            <div class="list-container" id="set-service-list">
+                <h3>Services</h3>
+                <div class="list-item">
+                    <label>Service Details</label>
+                    <input type="text" class="service-name" placeholder="Service Name">
+                    <input type="number" class="service-price" placeholder="Price (PKR)">
+                    <input type="number" class="service-time" placeholder="Time (min)">
+                    <button class="btn" onclick="removeListItem(this)">Remove</button>
+                </div>
+            </div>
+            <button class="btn" onclick="addService('set-service-list')">Add Service</button>
+            <label for="set-owner-image">Owner Image</label>
+            <input type="file" id="set-owner-image" accept="image/*">
+            <label for="set-salon-image">Salon Images</label>
+            <input type="file" id="set-salon-image" accept="image/*" multiple>
+            <button class="btn" onclick="saveSettings()">Save</button>
+            <button class="btn" onclick="showForm('salon-dashboard')">Back to Dashboard</button>
+            <button class="btn" onclick="showSection('home')">Back to Home</button>
+        </div>
+        <div id="salon-dashboard" class="form-container" style="display: none;">
+            <div class="dashboard">
+                <h2>Your Salon Dashboard</h2>
+                <div id="dashboard-error" class="error"></div>
+                <div class="dashboard-grid">
+                    <div class="salon-card">
+                        
+                        <div class="slider" data-slider-id="dash-salon">
+                            <div class="slides">
+                                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c')"></div>
+                                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1512496017736-7b6ae2690762')"></div>
+                                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1521498542256-5aea2ebb8090')"></div>
+                            </div>
+                            <button class="slider-btn prev" onclick="moveSlide('dash-salon', -1)">❮</button>
+                            <button class="slider-btn next" onclick="moveSlide('dash-salon', 1)">❯</button>
+                        </div>
+                        <div class="details">
+                            <p><strong>Salon Name:</strong> <span id="dash-salon-name">Salon Name</span></p>
+                            <p><strong>Owner:</strong> <span id="dash-owner-name">Owner: </span></p>
+                            <p class="location"><strong>Location:</strong> <span id="dash-location"><a href="https://www.google.com/maps/search/?api=1&query=Location" target="_blank">Location</a></span></p>
+                            <p><strong>Hours:</strong> <span id="dash-hours">Hours: </span></p>
+                            <p><strong>Breaks:</strong> <span id="dash-breaks">Breaks: </span></p>
+                            <p><strong>Services:</strong> <span id="dash-services">Services: </span></p>
+                        </div>
+                    </div>
+                    <div class="salon-card">
+                        <h3>Booking Stats</h3>
+                        <div class="details">
+                            <p><strong>Total Bookings Done:</strong> <span id="total-bookings">0</span></p>
+                            <p><strong>Total Bookings Pending:</strong> <span id="pending-bookings">0</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin: 20px;">
+                    <button class="btn" onclick="Complete_Currect_Customer()">Complete Current Custome</button>
+                    <button class="btn" onclick="Cancel_Currect_Customer()">Cancel Current Customer</button>
+                    <button class="btn" onclick="cancelAllBookings()">Cancel All Booking</button>
+                    <button class="btn" onclick="showForm('salon-settings')">Settings</button>
+                    <button class="btn" onclick="showSection('home')">Home</button>
+                </div>
+                <div class="form-container">
+                    <h3>Manual Booking:</h3>
+                    <div id="manual-dashboard-error" class="error"></div>
+                    <label for="manualBooking-timeTake">Time to Done</label>
+                    <label for="manualBooking-timeTake">please agar kisi ki booking ho to kisi or ko nahi bulaye ga</p>
+                    <input type="number" id="manualBooking-timeTake" placeholder="Time to Done Work in Minutes" required>
+                    <button class="btn" onclick="manualBook()">Manual Book Customer</button>
+                </div>
+
+                <h2>Pending Bookings</h2>
+                <div id="pending-bookings-grid" class="dashboard-grid"></div>
+                
+                <h2>Completed Bookings</h2>
+                <div id="completed-bookings-grid" class="dashboard-grid"></div>
+
+                <h2>Canceled Bookings</h2>
+                <div id="canceled-bookings-grid" class="dashboard-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Salon Booking Section -->
+    <div id="user-booking" class="section">
+        <div class="form-container">
+            <h2>Book Your Appointment</h2>
+            <div id="booking-error" class="error"></div>
+            <h3 id="booking-salon-name"></h3>
+            <p id="booking-owner-name"></p>
+
+            <p id="booking-location" class=" "><a href="https://www.google.com/maps/search/?api=1&query=Location" target="_blank">Location</a></p>
+
+            <div class="slider" data-slider-id="booking-salon">
+                <div class="slides">
+                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c')"></div>
+                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1512496017736-7b6ae2690762')"></div>
+                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1521498542256-5aea2ebb8090')"></div>
+                </div>
+                <button class="slider-btn prev" onclick="moveSlide('booking-salon', -1)">❮</button>
+                <button class="slider-btn next" onclick="moveSlide('booking-salon', 1)">❯</button>
+            </div>
+            <label for="customer-name">Customer Name (Optional)</label>
+            <input type="text" id="customer-name" placeholder="Customer Name (Optional)">
+            <label for="customer-number">Customer Number (for Notify your Turn)</label>
+            <input type="text" id="customer-number" placeholder="Customer Number">
+            <label for="booking-service">Select Service</label>
+            <select id="booking-service" required>
+                <option value="">Select Service</option>
+            </select>
+            <label for="booking-time">Select Time</label>
+            <select id="booking-time" required>
+                <!-- <option value="token">Token</option> -->
+            </select>
+            <!-- <label for="customer-image">Your Image</label>
+            <input type="file" id="customer-image" accept="image/*"> -->
+            <button class="btn" onclick="bookAppointment()">Book</button>
+            <button class="btn" onclick="showSection('home')">Back to Home</button>
+        </div>
+    </div>
+
+    <!-- Your Booked Salon Section -->
+    <div id="your-booked-salon" class="section">
+        <div class="form-container">
+        <h2>Your Booked Salons</h2>
+        <div id="your_booking-error" class="error"></div>
+        <div class="bookings-grid" id="bookings-grid"></div>
+        <div style="text-align: center; margin: 20px;">
+            <button class="btn" onclick="showSection('home')">Book Another Salon</button>
+        </div>
+        </div>
+    </div>
+
+    <!-- No Booking Section -->
+    <div id="no-booking" class="section">
+        <div class="no-booking">
+            <h2>No Bookings Found</h2>
+            <p>Book a salon now to get started!</p>
+            <button class="btn" onclick="showSection('home')">Back to Home</button>
+        </div>
+    </div>
+
+    <br>
+    <footer style="box-shadow: -1px 0px 10px rgba(0, 0, 0, 0.2);">
+        <br>
+        <p>CEO: Shayan Shahid - email: shayanwork123@gmail.com</p>
+        <hr>
+        <p>Manager: Areeb Malick - email: areebmalick36@gmail.com</p>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <!-- <script src="scripts_backup.js"></script> -->
+     
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+    <script src="firebase-logic.js"></script>
+    <script src="scripts_new.js"></script>
+</body>
+</html>
